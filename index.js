@@ -78,6 +78,7 @@ app.get('/', ( req, res ) => {
             });
             results.push(data)
         }
+        await browser.close()
         res.json(results)
     })();
 })

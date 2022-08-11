@@ -79,7 +79,6 @@ app.get('/', ( req, res ) => {
             results.push(data)
         }
         res.json(results)
-
     })();
 })
 

@@ -1,5 +1,11 @@
-const puppeteer = require('puppeteer');
+const puppeteer = require('puppeteer-extra');
+// plugin to hide puppeteer
+const StealthPlugin = require('puppeteer-extra-plugin-stealth');
+puppeteer.use(StealthPlugin())
 
+// AdBlock plugin to increase speed
+const AdblockerPlugin = require('puppeteer-extra-plugin-adblocker')
+puppeteer.use(AdblockerPlugin({blockTrackers: true}))
 
 const createFlashcards = async () => {
     // const browser = await puppeteer.launch({headless: false})

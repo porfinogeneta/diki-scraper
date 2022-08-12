@@ -16,7 +16,7 @@ const createFlashcards = async () => {
     await page.click('.buttonVerticalAlignMiddle')
     // form filling
     // wait for form being visible
-    await page.waitForSelector('#login', { visible: true, timeout: 0})
+    await page.waitForSelector('#login', { visible: false, timeout: 0})
     await page.type('#login', 'szyman123drum@gmail.com')
     await page.type('#haslo', 'Zielony0103')
     // clicking Login
@@ -38,61 +38,47 @@ const createFlashcards = async () => {
 
     let results = [];
 
-    await page.goto(GetLinks[0], { waitUntil: 'networkidle0', timeout: 0 });
-
-    const data = await page.evaluate(() => {
-        // get main word
-        const word = document.querySelector('h1 .hw')
-        // get one example sentence
-        const senTag = document.querySelector('.exampleSentence')
-        const sen = senTag != null ? senTag.innerText : null
-        // get all hv from ol list
-        const translationTags = document.querySelectorAll('ol li .hw')
-        let translations = []
-        translationTags.forEach((tag) => {
-            translations.push(tag.innerText)
-        })
-        // create flashcard
-        const f = {
-            word: word.innerText,
-            // get maximally 3 words to translations
-            translation: translations.slice(0, 3 || translations.length),
-            sentence: sen
+    // get list with non-repetitioning words indexes, the amount of indexes is 10
+    const randomArray = () => {
+        let indexesToDownload = []
+        for (let i = 0; i < 10; i++) {
+            const index = Math.round(Math.random() * GetLinks.length)
+            indexesToDownload.push(index)
+            // if (!indexesToDownload.includes(index)) {
+            //     indexesToDownload.push(index)
+            // }
         }
-        return f
-    });
-    // push one flashcard to results
-    results.push(data)
+        return indexesToDownload
+    }
 
-    // for (let i = 0; i < GetLinks.length; i++) {
-    //     await page.goto(GetLinks[i], { waitUntil: 'networkidle0', timeout: 0 });
-    //
-    //     const data = await page.evaluate(() => {
-    //         let flashcards = [];
-    //         // get main word
-    //         const word = document.querySelector('h1 .hw')
-    //         // get one example sentence
-    //         const senTag = document.querySelector('.exampleSentence')
-    //         const sen = senTag != null ? senTag.innerText : null
-    //         // get all hv from ol list
-    //         const translationTags = document.querySelectorAll('ol li .hw')
-    //         let translations = []
-    //         translationTags.forEach((tag) => {
-    //             translations.push(tag.innerText)
-    //         })
-    //         // create flashcard
-    //         const f = {
-    //             word: word.innerText,
-    //             // get maximally 3 words to translations
-    //             translation: translations.slice(0, 3 || translations.length),
-    //             sentence: sen
-    //         }
-    //         return f
-    //     });
-    //     results.push(data)
-    // }
+    for (let i = 0; i < randomArray().length; i++) {
+        let index = randomArray()[i]
+        await page.goto(GetLinks[index], { waitUntil: 'networkidle0', timeout: 0 });
+
+        const data = await page.evaluate(() => {
+            // get main word
+            const word = document.querySelector('h1 .hw')
+            // get one example sentence
+            const senTag = document.querySelector('.exampleSentence')
+            const sen = senTag != null ? senTag.innerText : null
+            // get all hv from ol list
+            const translationTags = document.querySelectorAll('ol li .hw')
+            let translations = []
+            translationTags.forEach((tag) => {
+                translations.push(tag.innerText)
+            })
+            // create flashcard
+            return {
+                word: word.innerText,
+                // get maximally 3 words to translations
+                translation: translations.slice(0, 3 || translations.length),
+                sentence: sen
+            }
+        });
+        results.push(data)
+    }
     await browser.close()
     return results
 }
 
-module.exports = createFlashcards;
+module.exports = createFlashcards

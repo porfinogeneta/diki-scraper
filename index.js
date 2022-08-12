@@ -38,33 +38,59 @@ const createFlashcards = async () => {
 
     let results = [];
 
-    for (let i = 0; i < GetLinks.length; i++) {
-        await page.goto(GetLinks[i], { waitUntil: 'networkidle0', timeout: 0 });
+    await page.goto(GetLinks[0], { waitUntil: 'networkidle0', timeout: 0 });
 
-        const data = await page.evaluate(() => {
-            let flashcards = [];
-            // get main word
-            const word = document.querySelector('h1 .hw')
-            // get one example sentence
-            const senTag = document.querySelector('.exampleSentence')
-            const sen = senTag != null ? senTag.innerText : null
-            // get all hv from ol list
-            const translationTags = document.querySelectorAll('ol li .hw')
-            let translations = []
-            translationTags.forEach((tag) => {
-                translations.push(tag.innerText)
-            })
-            // create flashcard
-            const f = {
-                word: word.innerText,
-                // get maximally 3 words to translations
-                translation: translations.slice(0, 3 || translations.length),
-                sentence: sen
-            }
-            return f
-        });
-        results.push(data)
-    }
+    const data = await page.evaluate(() => {
+        // get main word
+        const word = document.querySelector('h1 .hw')
+        // get one example sentence
+        const senTag = document.querySelector('.exampleSentence')
+        const sen = senTag != null ? senTag.innerText : null
+        // get all hv from ol list
+        const translationTags = document.querySelectorAll('ol li .hw')
+        let translations = []
+        translationTags.forEach((tag) => {
+            translations.push(tag.innerText)
+        })
+        // create flashcard
+        const f = {
+            word: word.innerText,
+            // get maximally 3 words to translations
+            translation: translations.slice(0, 3 || translations.length),
+            sentence: sen
+        }
+        return f
+    });
+    // push one flashcard to results
+    results.push(data)
+
+    // for (let i = 0; i < GetLinks.length; i++) {
+    //     await page.goto(GetLinks[i], { waitUntil: 'networkidle0', timeout: 0 });
+    //
+    //     const data = await page.evaluate(() => {
+    //         let flashcards = [];
+    //         // get main word
+    //         const word = document.querySelector('h1 .hw')
+    //         // get one example sentence
+    //         const senTag = document.querySelector('.exampleSentence')
+    //         const sen = senTag != null ? senTag.innerText : null
+    //         // get all hv from ol list
+    //         const translationTags = document.querySelectorAll('ol li .hw')
+    //         let translations = []
+    //         translationTags.forEach((tag) => {
+    //             translations.push(tag.innerText)
+    //         })
+    //         // create flashcard
+    //         const f = {
+    //             word: word.innerText,
+    //             // get maximally 3 words to translations
+    //             translation: translations.slice(0, 3 || translations.length),
+    //             sentence: sen
+    //         }
+    //         return f
+    //     });
+    //     results.push(data)
+    // }
     await browser.close()
     return results
 }

@@ -19,7 +19,7 @@ app.get('/flashcards', (request, response) => {
 });
 
 //Catches requests made to localhost:3000/
-app.get('/', (req, res) => res.send('Hello World!'));
+app.get('/', (req, res) => res.send('Welcome to flashcards API'));
 
 
 //Initialises the express server on the port 30000

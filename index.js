@@ -41,7 +41,7 @@ const createFlashcards = async () => {
     // get list with non-repetitioning words indexes, the amount of indexes is 10
     const randomArray = () => {
         let indexesToDownload = []
-        for (let i = 0; i < 15; i++) {
+        for (let i = 0; i < 10; i++) {
             const index = Math.round(Math.random() * GetLinks.length)
             indexesToDownload.push(index)
             if (!indexesToDownload.includes(index)) {

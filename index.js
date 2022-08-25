@@ -86,5 +86,5 @@ const createFlashcards = async () => {
     return results
 }
 
-// module.exports = createFlashcards
-console.log(createFlashcards())
+module.exports = createFlashcards
+// console.log(createFlashcards())

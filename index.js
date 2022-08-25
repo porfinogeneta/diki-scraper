@@ -41,18 +41,20 @@ const createFlashcards = async () => {
     // get list with non-repetitioning words indexes, the amount of indexes is 10
     const randomArray = () => {
         let indexesToDownload = []
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < 15; i++) {
             const index = Math.round(Math.random() * GetLinks.length)
             indexesToDownload.push(index)
-            // if (!indexesToDownload.includes(index)) {
-            //     indexesToDownload.push(index)
-            // }
+            if (!indexesToDownload.includes(index)) {
+                indexesToDownload.push(index)
+            }
         }
         return indexesToDownload
     }
 
-    for (let i = 0; i < randomArray().length; i++) {
-        let index = randomArray()[i]
+    const arr = randomArray()
+
+    for (let i = 0; i < arr.length; i++) {
+        let index = arr[i]
         await page.goto(GetLinks[index], { waitUntil: 'networkidle0', timeout: 0 });
 
         const data = await page.evaluate(() => {
@@ -69,6 +71,7 @@ const createFlashcards = async () => {
             })
             // create flashcard
             return {
+                id: i,
                 word: word.innerText,
                 // get maximally 3 words to translations
                 translation: translations.slice(0, 3 || translations.length),
@@ -81,4 +84,5 @@ const createFlashcards = async () => {
     return results
 }
 
-module.exports = createFlashcards
+// module.exports = createFlashcards
+createFlashcards()

@@ -7,11 +7,10 @@ const port = process.env.PORT || 8000;
 //Import puppeteer function
 const getFlashcards = require('./index');
 
-app.use(cors)
+app.use(cors())
 
 //Catches requests made to localhost:3000/search
 app.get('/flashcards', (request, response) => {
-    response.set('Access-Control-Allow-Origin', '*');
     // run the function on the request to /flashcards
     getFlashcards()
         .then(results => {

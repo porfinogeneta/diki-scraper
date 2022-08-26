@@ -9,6 +9,7 @@ const getFlashcards = require('./index');
 
 //Catches requests made to localhost:3000/search
 app.get('/flashcards', (request, response) => {
+    response.set('Access-Control-Allow-Origin', '*');
     // run the function on the request to /flashcards
     getFlashcards()
         .then(results => {

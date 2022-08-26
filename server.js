@@ -1,11 +1,13 @@
 const express = require('express');
 const app = express();
-
+const cors = require('cors')
 const ip = process.env.IP || '0.0.0.0';
 const port = process.env.PORT || 8000;
 
 //Import puppeteer function
 const getFlashcards = require('./index');
+
+app.use(cors)
 
 //Catches requests made to localhost:3000/search
 app.get('/flashcards', (request, response) => {
@@ -13,7 +15,7 @@ app.get('/flashcards', (request, response) => {
     // run the function on the request to /flashcards
     getFlashcards()
         .then(results => {
-            //Returns a 200 Status OK with Results JSON back to the client.
+            //Returns a 200 Status OK with Results JSON back to the client
             response.status(200);
             response.json(results);
         });

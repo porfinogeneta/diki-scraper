@@ -82,9 +82,21 @@ const createFlashcards = async () => {
         results.push({...data, id: i})
     }
     await browser.close()
-    console.log(results)
-    return results
+
+    return JSON.stringify(results)
 }
 
-module.exports = createFlashcards
-// console.log(createFlashcards())
+// creating JSON file
+const fs = require('fs')
+
+// fs.readFile('./json/data.json', 'utf-8', (err, jsonString) => {
+//     console.log(jsonString)
+// })
+
+createFlashcards().then(res => fs.writeFile('./json/data.json', res, (err) => {
+    console.log(err)
+}))
+
+
+// createFlashcards().then(res => console.log(res))
+// module.exports = createFlashcards

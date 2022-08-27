@@ -24,7 +24,7 @@ const createFlashcards = async () => {
     await page.waitForSelector('.dictionaryLastSearchesHistory', { visible: true, timeout: 0})
 
 
-    // creating list with links
+    // creating list with links to words
     const GetLinks = await page.evaluate(() => {
         const words = document.querySelectorAll('.dikicolumn ul li')
         let links = []
@@ -36,9 +36,10 @@ const createFlashcards = async () => {
         return links
     })
 
+
     let results = [];
 
-    // get list with non-repetitioning words indexes, the amount of indexes is 10
+    // get list with non-repetitioning words indexes, the amount of indexes is 15
     const randomArray = () => {
         let indexesToDownload = []
         for (let i = 0; i < 15; i++) {
@@ -54,9 +55,9 @@ const createFlashcards = async () => {
     const arr = randomArray()
 
 
-    for (let i = 0; i < arr.length; i++) {
-        let index = arr[i]
-        await page.goto(GetLinks[index], { waitUntil: 'networkidle0', timeout: 0 });
+    for (let i = 0; i < GetLinks.length; i++) {
+        // let index = arr[i]
+        await page.goto(GetLinks[i], { waitUntil: 'networkidle0', timeout: 0 });
 
         const data = await page.evaluate(() => {
             // get main word

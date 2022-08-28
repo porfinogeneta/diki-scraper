@@ -1,3 +1,5 @@
+// puppeteer bot to scrap diki
+
 const puppeteer = require('puppeteer-extra');
 // plugin to hide puppeteer
 const StealthPlugin = require('puppeteer-extra-plugin-stealth');
